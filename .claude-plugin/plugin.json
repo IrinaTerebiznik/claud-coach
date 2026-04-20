@@ -1,0 +1,9 @@
+{
+  "name": "dev-mentor",
+  "version": "1.0.0",
+  "description": "Teaching companion for developers — guides with Socratic questions instead of direct answers, and enforces PR/MR quality before submission.",
+  "author": {
+    "name": "Irina Lemes",
+    "email": "irina@inorbit.ai"
+  }
+}
