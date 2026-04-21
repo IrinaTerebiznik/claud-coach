@@ -1,8 +1,8 @@
 ---
 name: wdyt
-description: "This skill should be used when the user types /wdyt or asks 'what do you think?', 'does this look right?', 'is this correct?', 'check my changes', or 'review what I did' — to get a quick sanity check on recent code changes."
+description: "Command — not a mode. Triggers when the user types /wdyt or asks 'what do you think?', 'does this look right?', 'is this correct?', 'check my changes', or 'review what I did'. Runs a quick sanity check on recent code changes. Available at any point in any session mode."
 argument-hint: [context or question]
-version: 1.0.0
+version: 1.1.0
 ---
 
 # wdyt — What Do You Think?

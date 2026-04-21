@@ -1,8 +1,8 @@
 ---
 name: pr-guardian
-description: "This skill should be used when the user is about to create or submit a pull request or merge request, when the user runs git push with a remote branch, when the user runs gh pr create or glab mr create or similar PR/MR commands, when the user says they are done with a feature or ready to submit, or when the user asks to review or check their PR or MR before it goes up."
+description: "Standalone PR/MR checklist enforcer. No mentor mode, no teaching — just a fast, direct checklist check. Activates when the user runs git push, gh pr create, glab mr create, signals they are done with a task, or invokes /pr-guardian directly. Does not require mentor to be active."
 argument-hint: [branch-name]
-version: 1.0.0
+version: 1.1.0
 ---
 
 # PR Guardian
@@ -81,3 +81,30 @@ Required sections (if listed under `required_sections`) are checked by scanning 
 ## Tone
 
 Direct. Scannable. No explanations for why items matter — the developer is responsible for knowing. One line per item, status symbol first.
+
+## Companion Hook: Pre-push Code Review
+
+A `PreToolUse` agent hook can be added to `~/.claude/settings.json` to automatically scan for artifacts before every `git push` in a given directory scope. It complements pr-guardian by catching code-level issues (debug logs, commented-out code, test artifacts) before the PR metadata check.
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "agent",
+            "if": "Bash(git push*)",
+            "statusMessage": "Reviewing changes before push...",
+            "timeout": 60,
+            "prompt": "Pre-push code review gate.\n\nStep 1: Run pwd. If the current directory is NOT under /home/orbito/Repos/, output exactly this JSON and stop:\n{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"allow\"}}\n\nStep 2: Run: git diff main..HEAD to get the full diff of changes about to be pushed.\n\nStep 3: Perform a thorough code review of the diff. Check for:\n\nARTIFACTS (must block):\n- debug print() or console.log statements left in\n- commented-out code blocks\n- test-only hardcoded values or artifacts\n- TODO comments without a linked ticket/issue\n\nCODE QUALITY (block if significant):\n- logic errors or incorrect behavior\n- security issues (hardcoded secrets, injection risks, unsafe input handling)\n- missing error handling for cases that can realistically fail\n- broken or missing tests for new behavior\n- naming or clarity issues that would confuse a reviewer\n\nStep 4a: If issues found, output exactly this JSON (fill in a concise summary of findings):\n{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"deny\", \"permissionDecisionReason\": \"Code review found issues:\\n<list each issue on its own line>\"}}\n\nStep 4b: If the code looks good, output exactly this JSON:\n{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"permissionDecision\": \"allow\"}}"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Adjust the path in Step 1 to match the desired scope (e.g. `/home/user/Repos/`).

@@ -1,32 +1,39 @@
 # claud-coach
 
-> A Claude Code extension that teaches you to think instead of thinking for you — guides you through problems with questions, not answers, and enforces proper PRs so you stop wasting your reviewers' time.
+> A Claude Code plugin that teaches you to think instead of handing you answers — and blocks sloppy PRs before they reach your reviewers.
 
-Built for junior developers still building their instincts, and for everyone who keeps forgetting things before hitting submit.
-
-**Especially useful for developers with ADHD or ADD.** Every response is structured to avoid information overload — short, segmented, one thing at a time. The task planning format, the session modes, and the communication rules are all designed with neurodivergent developers in mind.
+Built for developers still building their instincts, and for everyone who keeps forgetting things before hitting submit. **Especially useful for developers with ADHD or ADD** — every response is short, structured, and one thing at a time.
 
 ---
 
-## What's inside
+## What it does
 
-### `mentor` — always-on teaching mode
-Starts every session with a greeting and asks how you want to work:
-- **Shadowing** — guided step-by-step through a full task, with a structured plan, testing section, and PR checklist built in
-- **Quick question** — targeted help on something specific
-- **Straight answers** — skip the guiding entirely
+- **Guides you through tasks** with questions instead of answers (shadowing mode)
+- **Checks your PR** automatically before every `git push` or `gh pr create`
+- **Quick sanity check** on demand with `/wdyt` — fast verdict, no lecture
 
-In shadowing mode, plans are segmented by topic, revealed one step at a time, and always end with testing and a PR checklist — so nothing gets forgotten.
+---
 
-If you need a straight answer mid-session, it asks: *"Just this question, or switch to direct mode for the rest of the chat?"* Mentor mode is back on by default next session.
+## Commands
 
-### `pr-guardian` — PR/MR checklist enforcer
-Runs automatically when you push or create a PR. Checks title, description, tests, and any company-specific requirements defined in `.pr-guardian.yml` at the repo root.
+Once the plugin is installed, use these in any Claude Code session:
 
-Also invokable directly: `/pr-guardian`
+**Mentor mode** — teaching companion with built-in PR checks:
 
-### `/wdyt` — quick sanity check
-Type `/wdyt` at any point to get a fast verdict on your recent changes. Not a full review — just flags anything obviously wrong or missing before you push.
+| Command | What it does |
+|---|---|
+| `/dev-mentor:mentor` | Start or re-enter mentor mode |
+| `/dev-mentor:mentor shadowing` | Jump straight into guided task mode |
+| `/dev-mentor:mentor straight` | Switch to direct answers |
+| `/dev-mentor:wdyt` | Quick sanity check on recent changes |
+
+**PR Guardian** — standalone, no mentor needed:
+
+| Command | What it does |
+|---|---|
+| `/dev-mentor:pr-guardian` | Run the PR checklist — direct, no teaching |
+
+PR Guardian runs **automatically** before `git push` and `gh pr create`, regardless of which mode is active.
 
 ---
 
@@ -34,7 +41,7 @@ Type `/wdyt` at any point to get a fast verdict on your recent changes. Not a fu
 
 ```bash
 # In Claude Code
-/plugins add https://github.com/<your-username>/claud-coach
+/plugins add https://github.com/IrinaTerebiznik/claud-coach
 ```
 
 ---
@@ -63,13 +70,49 @@ required_sections:
   - "## Test Plan"
 ```
 
-No `.pr-guardian.yml`? It falls back to a sensible default. See [`skills/pr-guardian/references/checklist-template.md`](skills/pr-guardian/references/checklist-template.md) for more examples.
+No `.pr-guardian.yml`? It falls back to a sensible default. See [`skills/pr-guardian/references/checklist-template.md`](skills/pr-guardian/references/checklist-template.md) for examples.
+
+---
+
+## Testing in a clean environment
+
+Uses Docker to spin up a fresh environment with no existing Claude Code config or plugins.
+
+**1. Build the image:**
+```bash
+docker build -t claud-coach-test .
+```
+
+**2. Create a `.env` file in the project root:**
+```bash
+ANTHROPIC_API_KEY=your_key_here
+```
+
+> `.env` is already in `.gitignore` — your key won't be committed.
+
+**3. Run a clean container:**
+```bash
+docker run -it --rm \
+  -v $(pwd):/plugin \
+  --env-file .env \
+  claud-coach-test bash
+```
+
+**4. Inside the container, start Claude with the plugin loaded:**
+```bash
+claude --plugin-dir /plugin
+```
+
+**5. Verify it works:**
+- Session-start greeting appears with the three mode options
+- Commands respond: `/dev-mentor:mentor`, `/dev-mentor:wdyt`, `/dev-mentor:pr-guardian`
+- Hook fires when you run `git push`
 
 ---
 
 ## Use as a template
 
-This repo is a GitHub template. Click **"Use this template"** to fork it as a starting point for your own Claude Code extension.
+This repo is a GitHub template. Click **"Use this template"** to fork it as a starting point for your own Claude Code plugin.
 
 ---
 
