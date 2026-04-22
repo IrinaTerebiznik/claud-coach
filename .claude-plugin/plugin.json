@@ -1,9 +1,14 @@
 {
   "name": "dev-mentor",
-  "version": "1.0.0",
-  "description": "Teaching companion for developers — guides with Socratic questions instead of direct answers, and enforces PR/MR quality before submission.",
+  "version": "2.0.0",
+  "description": "Teaching companion for developers — guides with questions instead of answers, enforces PR quality before submission, and is ADHD-friendly by design.",
   "author": {
     "name": "Irina Lemes",
-    "email": "irina@inorbit.ai"
-  }
+    "email": "irina@inorbit.ai",
+    "url": "https://github.com/IrinaTerebiznik"
+  },
+  "homepage": "https://github.com/IrinaTerebiznik/claud-coach",
+  "repository": "https://github.com/IrinaTerebiznik/claud-coach",
+  "license": "MIT",
+  "keywords": ["mentor", "teaching", "pr-guardian", "adhd", "junior-developer", "code-review"]
 }

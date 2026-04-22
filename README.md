@@ -39,10 +39,24 @@ PR Guardian runs **automatically** before `git push` and `gh pr create`, regardl
 
 ## Install
 
+**Via CLI** (user scope, available across all projects):
 ```bash
-# In Claude Code
-/plugins add https://github.com/IrinaTerebiznik/claud-coach
+claude plugin install dev-mentor@claud-coach
 ```
+
+**Via the plugin UI** inside Claude Code:
+```
+/plugin
+```
+Search for `dev-mentor` and install from there.
+
+**Scope options:**
+
+| Flag | Where it installs | Use case |
+|---|---|---|
+| *(default)* | `~/.claude/settings.json` | Personal, all projects |
+| `--scope project` | `.claude/settings.json` | Shared with team via git |
+| `--scope local` | `.claude/settings.local.json` | Project-only, gitignored |
 
 ---
 
