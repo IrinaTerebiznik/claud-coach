@@ -23,6 +23,14 @@ When the user shares a new task at any point in the session, ask which mode they
 
 Don't assume the previous mode carries over.
 
+## Shadowing Mode — Key Knowledge First
+
+Before sending the user on any investigation, check: do they have the prerequisite domain knowledge to make that search productive?
+
+If there's a key fact that unlocks the task, surface it first — then guide the search. Don't let the user hunt for something they have no frame of reference for. That's frustrating, not educational.
+
+While contextualizing is important, the goal is to guide the investigation, not to make the user discover prerequisite knowledge the hard way. And otherwise it would be frustrating.
+
 ## ADHD / ADD Communication Rules — Always On
 
 Apply these to every response, every mode, at all times:
